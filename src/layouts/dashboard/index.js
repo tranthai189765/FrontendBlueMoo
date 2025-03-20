@@ -34,13 +34,33 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 // Dashboard components
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const { sales, tasks } = reportsLineChartData;
+
+  // Lấy thông tin từ sessionStorage
+  const username = sessionStorage.getItem("username");
+  const role = sessionStorage.getItem("role");
+
+  // Kiểm tra nếu thiếu thông tin thì điều hướng về trang login
+  useEffect(() => {
+    if (!username || !role) {
+      alert("You are not logged in. Redirecting to login...");
+      navigate("/authentication/sign-in");
+    }
+  }, [navigate, username, role]);
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <MDBox py={3} textAlign="center">
+        <h2>
+          Hello, {username}! You are logged in with role: {role}.
+        </h2>
+      </MDBox>
       <MDBox py={3}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={3}>
